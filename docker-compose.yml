@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+
+  txgh:
+    image: mjjacko/txgh
+    container_name: txgh-peek
+    restart: always
+    volumes:
+      - ./config/tx.config:/usr/app/config/tx.config:ro
+    environment:
+      - VIRTUAL_HOST=txgh.peek.uploadedlobster.com
+      - VIRTUAL_PORT=9292
+      - VIRTUAL_NETWORK=nginx-proxy
+      - LETSENCRYPT_HOST=txgh.peek.uploadedlobster.com
+      - LETSENCRYPT_EMAIL=phil@parolu.io
+      - GITHUB_PUSH_SOURCE_TO=peek
+      - GITHUB_USERNAME=phw
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
+      - GITHUB_BRANCH=master
+      - TX_CONFIG_PATH=config/tx.config
+      - TX_USERNAME=phwolfer
+      - TX_PASSWORD=${TX_PASSWORD}
+      - TX_PUSH_TRANSLATIONS_TO=phw/peek
+      - TX_WEBHOOK_SECRET=${TX_WEBHOOK_SECRET}
+    networks:
+      - proxy-tier
+
+networks:
+  proxy-tier:
+    external:
+      name: nginx-proxy
+
